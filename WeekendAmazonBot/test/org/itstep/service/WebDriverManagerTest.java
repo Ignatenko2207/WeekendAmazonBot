@@ -47,7 +47,7 @@ public class WebDriverManagerTest {
 	public void testAddGoodToCart() {
 		WebDriver driver = driverManager.getWebDriver();
 		
-		Account account = new Account("Alex", "Ignatenko", "Ignatenko_A_12347777@gmail.com", "123456789");
+		Account account = new Account("Alex", "Ignatenko", "Ignatenko_A_12258822455@gmail.com", "123456789");
 
 		driver = driverManager.registerAccount(driver, account);
 

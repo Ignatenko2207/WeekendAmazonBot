@@ -83,8 +83,12 @@ public class WebDriverManager {
 		
 		List<WebElement> navInputElements = driver.findElements(By.className("nav-input"));
 		for (WebElement inputElement : navInputElements) {
-			if(inputElement.getAttribute("value") != null && inputElement.getAttribute("value").equals("Go")) {
-				inputElement.submit();
+			try {
+				if(inputElement.getAttribute("value").equals("Go")) {
+					inputElement.submit();
+				}
+			} catch (Exception e) {
+				continue;
 			}
 		}
 		Timer.waitSec(3);
@@ -103,7 +107,7 @@ public class WebDriverManager {
 					List<WebElement> linkElements = liElement.findElements(By.tagName("a"));
 					for (WebElement linkElement : linkElements) {
 						if(linkElement.getAttribute("class")!=null && linkElement.getAttribute("class").startsWith("a-link-normal")) {
-							productLink = liElement.getAttribute("href");
+							productLink = linkElement.getAttribute("href");
 							productLinkNotFound = false;
 							break;
 						}
