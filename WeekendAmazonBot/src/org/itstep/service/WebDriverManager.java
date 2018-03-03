@@ -1,9 +1,11 @@
 package org.itstep.service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.itstep.model.Account;
 import org.openqa.selenium.By;
+import org.openqa.selenium.By.ByTagName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,14 +28,18 @@ public class WebDriverManager {
 		
 		WebDriver driver = new ChromeDriver(options);
 		
-		driver.manage().timeouts().pageLoadTimeout(45, TimeUnit.SECONDS);
-		driver.manage().timeouts().setScriptTimeout(45, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+		driver.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
 		
 		Timer.waitSec(5);
 		return driver;
 	}
 	
 	public WebDriver registerAccount(WebDriver driver, Account account) {
+		
+		if(driver == null) {
+			return driver;
+		}
 		
 		driver.get(BASE_URL);
 		
@@ -61,10 +67,69 @@ public class WebDriverManager {
 		submitElement.submit();
 		
 		String pageLink = driver.getCurrentUrl();
-		Timer.waitSec(6);
+		Timer.waitSec(5);
 		driver.get(pageLink);
+		
+		Timer.waitSec(5);
+		return driver;
+	}
+	
+	// driver must be with registered account page
+	public WebDriver addGoodToCartByAsin(WebDriver driver, String asin) {
+		
+		Timer.waitSec(15);
+		WebElement searchInputElement = driver.findElement(By.id("twotabsearchtextbox"));
+		searchInputElement.sendKeys(asin);
+		
+		List<WebElement> navInputElements = driver.findElements(By.className("nav-input"));
+		for (WebElement inputElement : navInputElements) {
+			if(inputElement.getAttribute("value") != null && inputElement.getAttribute("value").equals("Go")) {
+				inputElement.submit();
+			}
+		}
+		Timer.waitSec(3);
+		String currentUrl = driver.getCurrentUrl();
+		driver.get(currentUrl);
+		Timer.waitSec(5);
+		
+		// now it is navigation page with products
+		WebElement ulElement = driver.findElement(By.id("s-results-list-atf"));
+		List<WebElement> productsList = ulElement.findElements(By.tagName("li"));
+		String productLink = "";
+		boolean productLinkNotFound = true;
+		for (WebElement liElement : productsList) {
+			if(productLinkNotFound) {
+				if(liElement.getAttribute("data-asin")!=null && liElement.getAttribute("data-asin").equals(asin)) {
+					List<WebElement> linkElements = liElement.findElements(By.tagName("a"));
+					for (WebElement linkElement : linkElements) {
+						if(linkElement.getAttribute("class")!=null && linkElement.getAttribute("class").startsWith("a-link-normal")) {
+							productLink = liElement.getAttribute("href");
+							productLinkNotFound = false;
+							break;
+						}
+					}
+				}
+			}
+		}
+		Timer.waitSec(10);
+		if(productLink.isEmpty()) {
+			return driver;
+		}
+		driver.get(productLink);
+		Timer.waitSec(5);
+		
+		WebElement addToCart = driver.findElement(By.id("add-to-cart-button"));
+		addToCart.submit();
+		
+		Timer.waitSec(5);
+		currentUrl = driver.getCurrentUrl();
+		driver.get(currentUrl);
+		
+		Timer.waitSec(8);
 		
 		return driver;
 	}
 	
+	
+
 }

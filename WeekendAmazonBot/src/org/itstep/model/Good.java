@@ -12,5 +12,6 @@ public class Good {
 	private String imgUrl;
 	private int position;
 	private int page;
+	private String shopUrl;
 		
 }
