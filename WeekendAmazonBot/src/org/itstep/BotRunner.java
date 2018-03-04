@@ -1,5 +1,6 @@
 package org.itstep;
 
+import org.itstep.dao.AccountDAO;
 import org.itstep.model.Account;
 import org.itstep.service.Timer;
 import org.itstep.service.WebDriverManager;
@@ -9,14 +10,16 @@ public class BotRunner {
 
 	public static void main(String[] args) {
 		
-		WebDriverManager manager = new WebDriverManager();
-		WebDriver driver = manager.getWebDriver();
+//		WebDriverManager manager = new WebDriverManager();
+//		WebDriver driver = manager.getWebDriver();
 		
 		Account account = new Account("Alex", "Ignatenko", "Ignatenko_A_123456789@gmail.com", "123456789");
 		
-		driver = manager.registerAccount(driver, account);
+		AccountDAO.save(account);
 		
-		driver.quit();
+//		driver = manager.registerAccount(driver, account);
+//		
+//		driver.quit();
 
 	}
 
