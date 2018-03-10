@@ -11,4 +11,12 @@ public class Good {
 	private String name;
 	private String shopUrl;
 		
+	public Good() {
+	}
+
+	public Good(String asin, String name, String shopUrl) {
+		this.asin = asin;
+		this.name = name;
+		this.shopUrl = shopUrl;
+	}
 }
