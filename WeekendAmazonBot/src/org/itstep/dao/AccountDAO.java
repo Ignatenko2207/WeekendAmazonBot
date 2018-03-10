@@ -113,13 +113,14 @@ public class AccountDAO {
 
 	public static Account update(Account account) {
 
-		
+		String sql = "UPDATE accounts SET password=?, first_name=?, second_name=? WHERE email=?";
 		
 		return null;
 	}
 
-	public static void delite(Account account) {
-
+	public static void delite(String email) {
+		
+		String sql = "DELETE FROM accounts WHERE email=?";
 	}
 
 }
